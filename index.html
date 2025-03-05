@@ -1,11 +1,171 @@
-﻿<!DOCTYPE html>
-
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firestore Data</title>
+    <style>
+        /* Reset some default styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        /* Container for the content */
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Logo container for Pro tier */
+        #logo-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        /* Pro-tier logo styling */
+        #logo {
+            max-width: 200px; /* Adjust size */
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Instagram link styling */
+        #instagram-container {
+            display: none;
+            margin-top: 15px;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        /* Modern and large text styling */
+        p, span {
+            font-size: 18px;
+            color: #333;
+        }
+
+        strong {
+            font-size: 20px;
+            color: #555;
+        }
+
+        h2 {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        /* Styling for basic text fields */
+        .field {
+            margin: 10px 0;
+        }
+
+        /* Hide fields for Pro-tier */
+        #pro-text {
+            display: none;
+        }
+
+        /* Simple transition effect */
+        #logo-container, #instagram-container {
+            transition: opacity 0.3s ease;
+        }
+    </style>
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Configuration (Your Config)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBklmceiEZs3xadGwfApv58sqkcoptQUh0",
+            authDomain: "venturecard.firebaseapp.com",
+            projectId: "venturecard",
+            storageBucket: "venturecard.firebasestorage.app",
+            messagingSenderId: "86554840885",
+            appId: "1:86554840885:web:1f4a02e67a6591c982867c",
+            measurementId: "G-QSVR3XKHET"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to get Firestore data
+        async function loadUser() {
+            const userId = "5A8TkzXTCccUvUvf1dfX";  // Your document ID
+            const docRef = doc(db, "Users", userId); // Collection name "Users" (with capital U)
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                // Get the user data
+                const userData = docSnap.data();
+                console.log("User Data:", userData);  // Log all fields to see the data
+
+                // Set basic fields (Always displayed)
+                document.getElementById("name").textContent = userData.Name;
+                document.getElementById("phone").textContent = userData.Phone;
+                document.getElementById("website").textContent = userData.Website;
+                document.getElementById("website").href = "https://" + userData.Website;
+                document.getElementById("email").textContent = userData.Email;
+
+                // Show Pro-tier specific content if "Pro" is true
+                if (userData.Pro === true) {
+                    document.getElementById("logo").src = userData.LogoUrl;  // Set Logo URL
+                    document.getElementById("logo-container").style.display = "block";  // Show logo container
+                    document.getElementById("instagram").href = "https://" + userData.Instagram;  // Set Instagram link
+                    document.getElementById("instagram-container").style.display = "block";  // Show Instagram container
+                } else {
+                    document.getElementById("logo-container").style.display = "none";  // Hide logo for non-Pro users
+                    document.getElementById("instagram-container").style.display = "none";  // Hide Instagram link for non-Pro users
+                }
+            } else {
+                console.log("No such document found!");
+            }
+        }
+
+        // Load user data when the page loads
+        window.onload = loadUser;
+    </script>
 </head>
 <body>
-<p>DataBase</p>
+    <div class="container">
+        <!-- Pro-tier Logo -->
+        <div id="logo-container">
+            <img id="logo" src="" alt="Logo">
+        </div>
+
+        <!-- Basic user info -->
+        <div class="field">
+            <p><strong>Name:</strong> <span id="name">Loading...</span></p>
+        </div>
+        <div class="field">
+            <p><strong>Phone:</strong> <span id="phone">Loading...</span></p>
+        </div>
+        <div class="field">
+            <p><strong>Website:</strong> <a id="website" href="#">Loading...</a></p>
+        </div>
+        <div class="field">
+            <p><strong>Email:</strong> <span id="email">Loading...</span></p>
+        </div>
+
+        <!-- Pro-tier Instagram link -->
+        <div id="instagram-container">
+            <p><strong>Instagram:</strong> <a id="instagram" href="#">Instagram Profile</a></p>
+        </div>
+    </div>
 </body>
 </html>
