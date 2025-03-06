@@ -10,6 +10,7 @@
     <input type="email" id="email" placeholder="Enter your email" required>
     <input type="password" id="password" placeholder="Enter your password" required>
     <button onclick="login()">Login</button>
+    <button onclick="goToDashboard()">Go to Dashboard</button> <!-- New Button -->
     <p id="message"></p>
 
     <script type="module">
@@ -22,7 +23,7 @@
             apiKey: "AIzaSyBklmceiEZs3xadGwfApv58sqkcoptQUh0",
             authDomain: "venturecard.firebaseapp.com",
             projectId: "venturecard",
-            storageBucket: "venturecard.firebasestorage.app",
+            storageBucket: "venturecard.appspot.com",
             messagingSenderId: "86554840885",
             appId: "1:86554840885:web:1f4a02e67a6591c982867c",
             measurementId: "G-QSVR3XKHET"
@@ -49,8 +50,8 @@
                     if (userData.Password === password) {
                         messageElement.style.color = "green";
                         messageElement.textContent = "Login successful!";
-                        // Redirect user or proceed with authenticated session
-                        window.location.href = "dashboard.html"; // Change to your main page
+                        // Redirect user to dashboard
+                        window.location.href = "dashboard.html"; 
                     } else {
                         messageElement.style.color = "red";
                         messageElement.textContent = "Incorrect password!";
@@ -65,7 +66,11 @@
                 messageElement.textContent = "Error logging in. Try again!";
             }
         }
+
+        // Function to go to the dashboard directly
+        function goToDashboard() {
+            window.location.href = "dashboard.html";
+        }
     </script>
 </body>
 </html>
-
